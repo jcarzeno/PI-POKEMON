@@ -2,8 +2,12 @@ const axios = require("axios");
 const { Types, Pokemon } =require("../db")
 
 
-
-
+/**
+ * It takes the first page of the API, then the next page, then it loops through each pokemon and gets
+ * the data for each pokemon, then returns an array of all the pokemon.
+ * @param url - https://pokeapi.co/api/v2/pokemon
+ * @returns An array of objects.
+ */
 const getApiPoke = async (url) => {
   try {
     const apiResults = await axios.get(`https://pokeapi.co/api/v2/pokemon`);
@@ -15,7 +19,7 @@ const getApiPoke = async (url) => {
       p.id = url.data.id;
       p.img = url.data.sprites.front_default;
       p.hp = url.data.stats[0].base_stat;
-      p.strength = url.data.stats[1].base_stat;
+      p.strength = url.data.stats[1].base_stat; /// strength o attack?????
       p.defense = url.data.stats[2].base_stat;
       p.speed = url.data.stats[5].base_stat;
       p.height = url.data.height;
@@ -28,6 +32,10 @@ const getApiPoke = async (url) => {
   }
 };
 
+/**
+ * It takes the data from the database and creates a new object with the data from the database and the
+ * data from the API.
+ */
 const getInfoDB = async () => {
   try {
     let dbData = await Pokemon.findAll({
@@ -39,6 +47,7 @@ const getInfoDB = async () => {
         },
       },
     });
+
 
     let poke = [];
     for (let i = 0; i < dbData.length; i++) {
@@ -79,6 +88,13 @@ const allPoke = async () => {
   }
 };
 
+/**
+ * It takes a name as a parameter, checks if the name is in the database, if it is, it returns the
+ * name, if it isn't, it makes an API call to get the name and returns it.
+ * </code>
+ * @param name - name of the pokemon
+ * @returns An object with the following properties:
+ */
 const getByName = async (name) => {
   try {
     const nameDb = await Pokemon.findOne({
@@ -118,6 +134,11 @@ const getByName = async (name) => {
   }
 };
 
+/**
+ * It gets all the types from the database, if there are no types in the database, it gets all the
+ * types from the API and saves them in the database, and then returns the types.
+ * @returns An array of objects with the name property.
+ */
 const getApiTypes = async () => {
   try {
     let tipos = await Types.findAll({ attributes: ["name"] });

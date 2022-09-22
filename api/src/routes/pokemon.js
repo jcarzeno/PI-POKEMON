@@ -7,9 +7,9 @@ router.get("/", async (req, res) => {
   const { name } = req.query;
 
   try {
-    let infoP = await allPoke();
+    let infoPokemons = await allPoke();
     if (name) {
-      let namePoke = infoP.filter((e) =>
+      let namePoke = infoPokemons.filter((e) =>
         e.name.toLowerCase().includes(name.toLowerCase())
       );
 
@@ -17,12 +17,13 @@ router.get("/", async (req, res) => {
         ? res.status(200).send(namePoke)
         : res.status(400).send("the pokemon was not found");
     } else {
-      res.status(200).send(infoP);
+      res.status(200).send(infoPokemons);
     }
   } catch (error) {
     res.status(404).send(error);
   }
 });
+
 
 router.get("/:id", async (req, res) => {
   try {
@@ -76,7 +77,19 @@ router.post("/", async (req, res) => {
       res.status(404).send(error);
     }
   });
+  
+  // {
+  //   "name" : "prueba",
+  //   "hp": 2,
+  //   "defense": 4,
+  //   "speed": 5,
+  //   "height": 22,
+  //   "weight": 22,
+  //   "strength": 232,
+  //   "types": "prueba"
+  // }
 
+  
 // router.delete("/:id", async (req, res) => {
 //   const { id } = req.params;
 
